@@ -6,16 +6,29 @@ const db = require('./db/ConexaoDb');
 // Middlewares
 app.use(express.json());
 
-// Rotas
+// Rota principal / API LISTA TAREFAS - NODE.JS
 app.get('/', async (req, res) => {
   try {
     const result = await db.query('SELECT NOW()', null);
-    res.send(`Data/hora atual do banco: ${result.rows[0].now}`);
+    res.send(`
+      API LISTA TAREFAS - NODE.JS
+
+      SUCESSO! A API ESTÁ RODANDO CORRETAMENTE!
+    
+      Data/hora atual do banco: ${result.rows[0].now.toLocaleString()}
+    
+    `);
   } catch (error) {
     console.error('Erro na consulta:', error);
     res.status(500).send('Erro interno do servidor');
   }
 });
+
+// Demais rotas serão adicionadas aqui
+
+//Rota usuarios
+const rotaUsuario = require('./rotas/rotasUsuario/RotaUsuario.js');
+app.use('/usuarios', rotaUsuario);
 
 // Iniciar servidor
 app.listen(port, () => {
