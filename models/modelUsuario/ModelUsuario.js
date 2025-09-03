@@ -33,6 +33,18 @@ const retornarUsuarioEspecificoDb = async (id) => {
     }
   };
   
+//Retornar um usuario especifico por email e senha
+const retornarUsuarioEspecificoPorEmailESenhaDb = async (email, senha) => {
+    try {
+        const result = await db.query('SELECT * FROM usuario WHERE email = $1 AND senha = $2', [email, senha]);
+        return result.rows[0];
+    
+
+    } catch (error) {
+        console.error('Erro ao buscar usuario no banco de dados:', error);
+        throw new Error('Falha ao acessar usuario no banco de dados');
+    }
+}
 
 //Criar um usuario
 const criarUsuarioDb = async (usuario) => {
@@ -79,5 +91,6 @@ module.exports = {
     retornarUsuarioEspecificoDb,
     criarUsuarioDb,
     atualizarUsuarioDb,
-    deletarUsuarioDb
+    deletarUsuarioDb,
+    retornarUsuarioEspecificoPorEmailESenhaDb
 };

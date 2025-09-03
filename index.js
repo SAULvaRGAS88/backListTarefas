@@ -2,8 +2,11 @@ const express = require('express');
 const app = express();
 const port = 3000;
 const db = require('./db/ConexaoDb');
+const cors = require("cors");
 
 // Middlewares
+app.use(cors({ origin: "*" }));
+
 app.use(express.json());
 
 // Rota principal / API LISTA TAREFAS - NODE.JS

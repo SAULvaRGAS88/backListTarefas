@@ -6,7 +6,8 @@ const {
     retornarUsuarioEspecifico,
     criarUsuario,
     atualizarUsuario,
-    deletarUsuario
+    deletarUsuario,
+    retornarUsuarioEspecificoPorEmailESenha
 } = require('../../controller/controllerUsuario/ControllerUsuario');
 
 //Rota deretorno de todos os usuarios
@@ -17,6 +18,11 @@ router.get('/', (req, res) => {
 //Rota de retorno de um usuario especifico
 router.get('/:id', (req, res) => {
     retornarUsuarioEspecifico(req, res);
+});
+
+//Rota de retorno de um usuario especifico por email e senha
+router.post('/login', (req, res) => {
+    retornarUsuarioEspecificoPorEmailESenha(req, res);
 });
 
 //Rota de criação de um usuario

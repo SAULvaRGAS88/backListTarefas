@@ -1,6 +1,6 @@
 //Controller usuarios para as regras de negocio do usuario, não será a camada de acesso a dados
 const express = require('express');
-const { retornarTodosUsuariosDb, retornarUsuarioEspecificoDb, criarUsuarioDb, atualizarUsuarioDb, deletarUsuarioDb } = require('../../models/modelUsuario/ModelUsuario');
+const { retornarTodosUsuariosDb, retornarUsuarioEspecificoDb, criarUsuarioDb, atualizarUsuarioDb, deletarUsuarioDb, retornarUsuarioEspecificoPorEmailESenhaDb } = require('../../models/modelUsuario/ModelUsuario');
 
 //Retornar todos os usuarios
 const retornarTodosUsuarios = async (req, res) => {
@@ -45,7 +45,7 @@ const retornarTodosUsuarios = async (req, res) => {
 const retornarUsuarioEspecifico = async (req, res) => {
     try {
         const usuario = await retornarUsuarioEspecificoDb(req.params.id);
-        
+
         // Verifica se o usuário é null, undefined ou um objeto vazio
         if (!usuario || Object.keys(usuario).length === 0) {
             return res.status(404).json({
@@ -55,7 +55,7 @@ const retornarUsuarioEspecifico = async (req, res) => {
                 data: null
             });
         }
-        
+
         //retornar as tarefas do usuario
         const tarefas = usuario.tarefas;
 
@@ -86,6 +86,39 @@ const retornarUsuarioEspecifico = async (req, res) => {
     }
 };
 
+//Retornar um usuario especifico por email e senha
+
+const retornarUsuarioEspecificoPorEmailESenha = async (req, res) => {
+    try {
+        const usuario = await retornarUsuarioEspecificoPorEmailESenhaDb(req.body.email, req.body.senha);
+
+        if (!usuario || Object.keys(usuario).length === 0) {
+            return res.status(404).json({
+                statusCode: 404,
+                success: false,
+                message: "Usuário não encontrado",
+                data: null
+            });
+        }
+
+        return res.status(200).json({
+            statusCode: 200,
+            success: true,
+            message: "Usuário carregado com sucesso",
+            data: usuario
+        });
+
+    } catch (error) {
+        console.error('Erro ao buscar usuário:', error);
+        return res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Erro interno do servidor ao buscar usuário",
+            data: null
+        });
+    }
+}
+
 //Criar um usuario
 const criarUsuario = async (req, res) => {
     try {
@@ -100,7 +133,7 @@ const criarUsuario = async (req, res) => {
         }
 
         const usuario = await criarUsuarioDb(req.body);
-        
+
         // Retornar apenas dados seguros do usuário criado
         const usuarioSeguro = {
             id: usuario.id,
@@ -118,7 +151,7 @@ const criarUsuario = async (req, res) => {
 
     } catch (error) {
         console.error('Erro ao criar usuário:', error);
-        
+
         // Verificar se é um erro de duplicação (email já existe)
         if (error.code === 'SQLITE_CONSTRAINT' || error.code === '23505') {
             return res.status(409).json({
@@ -128,7 +161,7 @@ const criarUsuario = async (req, res) => {
                 data: null
             });
         }
-        
+
         return res.status(500).json({
             statusCode: 500,
             success: false,
@@ -142,7 +175,7 @@ const criarUsuario = async (req, res) => {
 const atualizarUsuario = async (req, res) => {
     try {
         const id = req.params.id;
-        
+
         // Verificar se o usuário existe antes de tentar atualizar
         const usuarioExistente = await retornarUsuarioEspecificoDb(id);
         if (!usuarioExistente) {
@@ -163,7 +196,7 @@ const atualizarUsuario = async (req, res) => {
         };
 
         const usuarioAtualizado = await atualizarUsuarioDb(dados);
-        
+
         // Retornar apenas dados seguros do usuário atualizado
         const usuarioSeguro = {
             id: usuarioAtualizado.id,
@@ -181,7 +214,7 @@ const atualizarUsuario = async (req, res) => {
 
     } catch (error) {
         console.error('Erro ao atualizar usuário:', error);
-        
+
         // Verificar se é um erro de duplicação (email já existe)
         if (error.code === 'SQLITE_CONSTRAINT' || error.code === '23505') {
             return res.status(409).json({
@@ -191,7 +224,7 @@ const atualizarUsuario = async (req, res) => {
                 data: null
             });
         }
-        
+
         return res.status(500).json({
             statusCode: 500,
             success: false,
@@ -205,7 +238,7 @@ const atualizarUsuario = async (req, res) => {
 const deletarUsuario = async (req, res) => {
     try {
         const id = req.params.id;
-        
+
         // Verificar se o usuário existe antes de tentar deletar
         const usuarioExistente = await retornarUsuarioEspecificoDb(id);
         if (!usuarioExistente) {
@@ -242,5 +275,6 @@ module.exports = {
     retornarUsuarioEspecifico,
     criarUsuario,
     atualizarUsuario,
-    deletarUsuario
+    deletarUsuario,
+    retornarUsuarioEspecificoPorEmailESenha
 };
