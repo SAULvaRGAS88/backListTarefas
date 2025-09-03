@@ -55,13 +55,17 @@ const retornarUsuarioEspecifico = async (req, res) => {
                 data: null
             });
         }
+        
+        //retornar as tarefas do usuario
+        const tarefas = usuario.tarefas;
 
         // Retornar apenas dados seguros do usuário
         const usuarioSeguro = {
             id: usuario.id,
             nome: usuario.nome,
             email: usuario.email,
-            created_at: usuario.created_at
+            created_at: usuario.created_at,
+            tarefas: tarefas
         };
 
         return res.status(200).json({

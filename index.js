@@ -30,6 +30,10 @@ app.get('/', async (req, res) => {
 const rotaUsuario = require('./rotas/rotasUsuario/RotaUsuario.js');
 app.use('/usuarios', rotaUsuario);
 
+//Rota tarefas
+const rotaTarefa = require('./rotas/rotasTarefas/RotaTarefa.js');
+app.use('/tarefas', rotaTarefa);
+
 // Iniciar servidor
 app.listen(port, () => {
   console.log(`Servidor rodando em http://localhost:${port}`);

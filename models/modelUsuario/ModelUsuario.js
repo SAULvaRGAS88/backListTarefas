@@ -13,16 +13,26 @@ const retornarTodosUsuariosDb = async () => {
     }
 }
 
-//Retornar um usuario especifico
 const retornarUsuarioEspecificoDb = async (id) => {
     try {
-        const result = await db.query('SELECT * FROM usuario WHERE id = $1', [id]);
-        return result.rows[0];
+      const result = await db.query(`
+        SELECT 
+          u.id, 
+          u.nome, 
+          u.email,
+          json_agg(t.*) AS tarefas
+        FROM usuario u
+        LEFT JOIN tarefa t ON u.id = t.usuario_id
+        WHERE u.id = $1
+        GROUP BY u.id
+      `, [id]);
+      return result.rows[0];
     } catch (error) {
-        console.error('Erro ao buscar usuario no banco de dados:', error);
-        throw new Error('Falha ao acessar usuario no banco de dados');
+      console.error('Erro ao buscar usuario no banco de dados:', error);
+      throw new Error('Falha ao acessar usuario no banco de dados');
     }
-}
+  };
+  
 
 //Criar um usuario
 const criarUsuarioDb = async (usuario) => {
