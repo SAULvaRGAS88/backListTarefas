@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-const port = 3000;
 const db = require('./db/ConexaoDb');
 const cors = require("cors");
 
@@ -27,8 +26,6 @@ app.get('/', async (req, res) => {
   }
 });
 
-// Demais rotas serão adicionadas aqui
-
 //Rota usuarios
 const rotaUsuario = require('./rotas/rotasUsuario/RotaUsuario.js');
 app.use('/usuarios', rotaUsuario);
@@ -37,7 +34,12 @@ app.use('/usuarios', rotaUsuario);
 const rotaTarefa = require('./rotas/rotasTarefas/RotaTarefa.js');
 app.use('/tarefas', rotaTarefa);
 
-// Iniciar servidor
-app.listen(port, () => {
-  console.log(`Servidor rodando em http://localhost:${port}`);
-});
+// const port = 3000;
+// // Iniciar servidor
+// app.listen(port, () => {
+//   console.log(`Servidor rodando em http://localhost:${port}`);
+// });
+
+
+// ✅ EXPORT PARA VERCEL (OBRIGATÓRIO)
+module.exports = app;
