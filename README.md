@@ -1,5 +1,9 @@
 # API Lista de Tarefas - Node.js
 
+🚀 Desenvolvido por: Saul Vargas 🚀
+
+[LinkedIn](https://www.linkedin.com/in/saul-vargas-68a97347/)
+
 ## 📋 Visão Geral
 
 Esta é uma API RESTful desenvolvida em Node.js para gerenciamento de usuários e tarefas. A aplicação utiliza uma arquitetura em camadas (MVC) e está configurada para deploy no Vercel.
